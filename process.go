@@ -53,8 +53,3 @@ func (s *ProcessStore) Exists(name string) bool {
 	_, exists := s.processes[name]
 	return exists
 }
-
-func (s *ProcessStore) Get(name string) (*Process, bool) {
-	process, exists := s.processes[name]
-	return process, exists
-}

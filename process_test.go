@@ -74,25 +74,4 @@ func TestStore(t *testing.T) {
 			t.Errorf("expected 3 process in store, got %d", len(processes))
 		}
 	})
-
-	t.Run("recover existent process", func(t *testing.T) {
-		store := NewProcessStore()
-		originalProcess := NewProcess("retrieve-test")
-		originalProcess.Running = true
-
-		store.Add(originalProcess)
-		retrieved, exists := store.Get("retrieve-test")
-		if !exists {
-			t.Error("expected to retrieve existing process")
-		}
-		if retrieved.Name != "retrieve-test" {
-			t.Errorf("expected name 'retrieve-test', got '%s'", retrieved.Name)
-		}
-		if !retrieved.Running {
-			t.Error("expected running state to be preserved")
-		}
-		if retrieved != originalProcess {
-			t.Error("expected to get the same process instance")
-		}
-	})
 }
