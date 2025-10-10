@@ -7,8 +7,11 @@ import (
 )
 
 func main() {
-	server := NewProcessServer(NewProcessStore())
+	log.Fatal(RunServer(":8080"))
+}
 
-	fmt.Println("Starting process manager server on :8080")
-	log.Fatal(http.ListenAndServe(":8080", server))
+func RunServer(addr string) error {
+	server := NewProcessServer(NewProcessStore())
+	fmt.Println("Starting process manager server on ", addr)
+	return http.ListenAndServe(addr, server)
 }

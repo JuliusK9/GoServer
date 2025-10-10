@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestProcessServer(t *testing.T) {
@@ -80,7 +81,13 @@ func TestProcessServer(t *testing.T) {
 
 		assertStatus(t, response.Code, http.StatusNotFound)
 	})
+}
 
+func TestRunServerDoesNotCrashImmediately(t *testing.T) {
+	go func() {
+		RunServer(":5000")
+	}()
+	time.Sleep(100 * time.Millisecond)
 }
 
 func newPostProcessRequest(name string) *http.Request {
