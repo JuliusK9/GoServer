@@ -42,19 +42,14 @@ func (s *ProcessServer) createProcess(w http.ResponseWriter, r *http.Request) {
 	process.Start()
 
 	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(map[string]string{
-		"name": process.Name,
-	})
 }
 
 func (s *ProcessServer) listProcesses(w http.ResponseWriter, r *http.Request) {
 	processes := s.store.List()
-	var response []map[string]string
+	var response []string
 	for _, p := range processes {
 		if p.Running {
-			response = append(response, map[string]string{
-				"name": p.Name,
-			})
+			response = append(response, p.Name)
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")

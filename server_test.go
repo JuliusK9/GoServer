@@ -42,10 +42,10 @@ func TestProcessServer(t *testing.T) {
 		assertStatus(t, response.Code, http.StatusOK)
 
 		body := response.Body.String()
-		if !strings.Contains(body, `"name":"process-1"`) {
+		if !strings.Contains(body, `"process-1"`) {
 			t.Errorf("expected body to contain process-1, got %s", body)
 		}
-		if strings.Contains(body, `"name":"process-2"`) {
+		if strings.Contains(body, `"process-2"`) {
 			t.Errorf("expected body to contain process-2, got %s", body)
 		}
 	})
