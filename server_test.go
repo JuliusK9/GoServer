@@ -27,8 +27,8 @@ func TestProcessServer(t *testing.T) {
 	})
 
 	t.Run("GET /process/list retrun all the processes", func(t *testing.T) {
-		process1 := NewProcess("process-1")
-		process2 := NewProcess("process-2")
+		process1 := NewProcess("process-1", DefaultRunFunc)
+		process2 := NewProcess("process-2", DefaultRunFunc)
 
 		store.Add(process1)
 		store.Add(process2)

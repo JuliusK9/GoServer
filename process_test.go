@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestProcess(t *testing.T) {
 	t.Run("create process with name", func(t *testing.T) {
 		name := "test-process"
-		process := NewProcess(name)
+		process := NewProcess(name, DefaultRunFunc)
 
 		if process.Name != name {
 			t.Errorf("expected name %s, got %s", name, process.Name)
@@ -19,7 +20,7 @@ func TestProcess(t *testing.T) {
 	})
 
 	t.Run("process start", func(t *testing.T) {
-		process := NewProcess("test")
+		process := NewProcess("test", DefaultRunFunc)
 
 		process.Start()
 
@@ -29,13 +30,30 @@ func TestProcess(t *testing.T) {
 	})
 
 	t.Run("running is true before start", func(t *testing.T) {
-		process := NewProcess("already-running")
+		process := NewProcess("already-running", DefaultRunFunc)
 		process.Running = true
 
 		process.Start()
 
 		if !process.Running {
 			t.Error("process should remain running")
+		}
+	})
+	t.Run("process with nil run function", func(t *testing.T) {
+		process := &Process{
+			"test",
+			true,
+			nil,
+		}
+		err := process.Start()
+
+		if err == nil {
+			t.Fatalf("expected error, got nil")
+		}
+
+		expected := fmt.Sprintf("RunFunc is required for process %s", process.Name)
+		if err.Error() != expected {
+			t.Errorf("unexpected error: got %q, want %q", err.Error(), expected)
 		}
 	})
 }
@@ -51,9 +69,9 @@ func TestStore(t *testing.T) {
 	})
 	t.Run("add multiple processes", func(t *testing.T) {
 		store := NewProcessStore()
-		process1 := NewProcess("process1")
-		process2 := NewProcess("process2")
-		process3 := NewProcess("process3")
+		process1 := NewProcess("process1", DefaultRunFunc)
+		process2 := NewProcess("process2", DefaultRunFunc)
+		process3 := NewProcess("process3", DefaultRunFunc)
 
 		store.Add(process1)
 		store.Add(process2)

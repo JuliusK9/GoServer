@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type ProcessServer struct {
@@ -25,6 +26,11 @@ func (s *ProcessServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func DefaultRunFunc() error {
+	time.Sleep(1 * time.Minute)
+	return nil
+}
+
 func (s *ProcessServer) createProcess(w http.ResponseWriter, r *http.Request) {
 	//estrae parametro "name"
 	name := strings.TrimPrefix(r.URL.Path, "/process/")
@@ -37,7 +43,7 @@ func (s *ProcessServer) createProcess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	process := NewProcess(name)
+	process := NewProcess(name, DefaultRunFunc)
 	s.store.Add(process)
 	process.Start()
 

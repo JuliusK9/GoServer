@@ -1,29 +1,34 @@
 package main
 
-import "time"
+import "fmt"
 
 type Process struct {
 	Name    string
 	Running bool
+	RunFunc func() error
 }
 
-func NewProcess(name string) *Process {
+func NewProcess(name string, runFunc func() error) *Process {
 	return &Process{
 		Name:    name,
 		Running: false,
+		RunFunc: runFunc,
 	}
 }
 
-func (p *Process) Start() {
-	if p.Running {
-		return
+func (p *Process) Start() error {
+	if p.RunFunc == nil {
+		return fmt.Errorf("RunFunc is required for process %s", p.Name)
 	}
+
 	p.Running = true
 
 	go func() {
-		time.Sleep(1 * time.Minute)
+		p.RunFunc() // Esegue SEMPRE la RunFunc
 		p.Running = false
 	}()
+
+	return nil
 }
 
 type ProcessStore struct {
