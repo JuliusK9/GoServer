@@ -1,4 +1,4 @@
-package main
+package process
 
 import (
 	"fmt"
@@ -104,4 +104,10 @@ func assertStatus(t testing.TB, got, want int) {
 	if got != want {
 		t.Errorf("got status %d, want %d", got, want)
 	}
+}
+
+func RunServer(addr string) error {
+	server := NewProcessServer(NewProcessStore())
+	fmt.Println("Starting process manager server on ", addr)
+	return http.ListenAndServe(addr, server)
 }

@@ -1,4 +1,4 @@
-package main
+package process
 
 import "fmt"
 
@@ -24,7 +24,7 @@ func (p *Process) Start() error {
 	p.Running = true
 
 	go func() {
-		p.RunFunc() // Esegue SEMPRE la RunFunc
+		p.RunFunc()
 		p.Running = false
 	}()
 
